@@ -10,9 +10,10 @@ Archivo = "prestamos.json"
 def cargar_prestamos():
     if not os.path.exists(Archivo):
         with open(Archivo, "w", encoding="utf-8") as f:
-            return json.dump([], f)
-        with open(Archivo, "r", encoding="utf-8") as f:
-            return json.load(f)
+            json.dump([], f)
+        return []
+    with open(Archivo, "r", encoding="utf-8") as f:
+        return json.load(f)
              
 def guardar_prestamos(prestamos):
     with open(Archivo, "w", encoding="utf-8") as f:
@@ -103,7 +104,7 @@ def rechazar_prestamo():
     for p in pendientes:
         print(f"ID: {p['id']} | Usuario: {p['id_usuario']} | Herramienta: {p['id_herramienta']} | Cantidad: {p['cantidad']}")
     try:   
-         id_solicitud = int(input("Ingrese el ID del prestamo a rechazar: "))
+        id_solicitud = int(input("Ingrese el ID del prestamo a rechazar: "))
     except ValueError:
         print("Debe ingresar un numero valido")
         return
@@ -115,7 +116,7 @@ def rechazar_prestamo():
     print("Prestamo rechazado")
     guardar_prestamos(prestamos)
     registrar_evento(f"Prestamo Rechazado administrador | Usuario: {prestamo['id_usuario']}"
-                  f"Herramienta: {prestamo['id_herramienta']}")
+                f"Herramienta: {prestamo['id_herramienta']}")
 
 def devolver_herramienta():
     prestamos = cargar_prestamos()
@@ -174,22 +175,22 @@ def prestamos_menu(usuario_id=None, admin=False):
                         print("ID no existe")
                         continue
                     ver_historial(usuario_id)
-                elif opcion == "5":
-                    break
-                else:
-                    print("Opcion no valida ")
+            elif opcion == "5":
+                break
             else:
-                if opcion == "1":
-                    if usuario_id is None:
-                        print("Usuario no identificado")
-                        break
-                    crear_prestamo(usuario_id)
-                elif opcion == "2":
-                    ver_historial(usuario_id)
-                elif opcion == "3":
+                    print("Opcion no valida ")
+        else:
+            if opcion == "1":
+                if usuario_id is None:
+                    print("Usuario no identificado")
                     break
-                else:
-                    print("Opcion no valida")
+                crear_prestamo(usuario_id)
+            elif opcion == "2":
+                ver_historial(usuario_id)
+            elif opcion == "3":
+                break
+            else:
+                print("Opcion no valida")
 def prestamos_activos_vencidos():
     prestamos = cargar_prestamos()
     hoy = datetime.now()
@@ -217,6 +218,3 @@ def prestamos_activos_vencidos():
         print(f"ID: {p['id']} | Usuario: {p['id-usuario']} | "
               f"Herramienta: {p['id_herramienta']}"
               f"Debia devolver: {p['fecha_devolucion_estimada']}")
-        
-    
-#print("Crear_prestamo existe:", callable(crear_prestamo))

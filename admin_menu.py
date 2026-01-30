@@ -21,7 +21,7 @@ def admin_menu():
         elif opcion == "2":
             gestion_herramientas.herramientas_menu()
         elif opcion == "3":
-            prestamos.prestamos_menu(admin_menu=True)
+            prestamos.prestamos_menu(admin=True)
         elif opcion == "4":
             prestamos.prestamos_activos_vencidos()
         elif opcion == "5":

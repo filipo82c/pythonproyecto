@@ -112,5 +112,5 @@ def herramientas_stock_bajo(limite=3):
         print("No hay herramientas con stock bajo")
         return
     for h in bajo:
-        print(f"ID: {['id']} | {h['nombre']} | "
+        print(f"ID: {h['id']} | {h['nombre']} | "
               f"Stock: {h['cantidad']} | Estado: {h['estado']}")      

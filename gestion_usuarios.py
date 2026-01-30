@@ -1,5 +1,6 @@
 import json
 import os
+import controlador as c
 Archivo = "usuarios.json"
 
 def cargar_usuarios():
@@ -13,21 +14,48 @@ def guardar_usuarios(usuarios):
     with open(Archivo, "w", encoding="utf-8") as f:
         json.dump(usuarios, f, indent=4)  
         
-def crear_usuario():
+def crear_usuario(tipo_forzado=None):
     usuarios = cargar_usuarios()
-    nuevo ={
-        "id": len(usuarios)+ 1,
-        "nombres": input("Nombres: "),
-        "apellidos": input("Apellidos: "),
-        "telefono": input("Telefono: "),
-        "direccion": input("Direccion: "),
-        "tipo_usuario": input("Tipo (Administrador/Residente) "),
-        "usuario": input("Usuario Registrado "),
-        "contraseña": input("Contraseña ")}
+
+    nombres = c.solotexto("Ingrese Nombres: ")
+    apellidos = c.solotexto("Ingrese Apellidos: ")
+    telefono = c.solonumeros("Telefono: ")
+    direccion = input("Direccion: ")
+
+    if tipo_forzado is None:
+        while True:
+            tipo = input("Tipo de usuario (Administrador/Residente): ").strip().lower()
+            if tipo == "administrador" or tipo == "residente":
+                break
+            print("Debe escribir Administrador o Residente")
+    else:
+        tipo = tipo_forzado.lower()
+        print("Tipo de usuario: Administrador")
+    cantidad_tipo = sum(1 for u in usuarios if u["tipo_usuario"].lower() == tipo)
+    usuario = f"{tipo} {cantidad_tipo + 1}"
+
+    while True:
+        contraseña = input("Contraseña: ").strip()
+        if contraseña == "":
+            print("La contraseña no puede estar vacia")
+        else:
+            break
+    nuevo = {
+        "id": len(usuarios) + 1,
+        "nombres": nombres,
+        "apellidos": apellidos,
+        "telefono": telefono,
+        "direccion": direccion,
+        "tipo_usuario": tipo.capitalize(),
+        "usuario": usuario,
+        "contraseña": contraseña
+    }
     usuarios.append(nuevo)
     guardar_usuarios(usuarios)
     print("Usuario creado correctamente")
-    input("Presione enter para volver al menu de gestion de usuarios")
+    print(f"Usuario asignado: {usuario}")
+    input("Presione enter para volver al menu")
+                
     
 def listar_usuarios():
     usuarios = cargar_usuarios()
@@ -67,7 +95,7 @@ def actualizar_usuario():
             print("usuario actualizado")
             return
     print("usuario no encontrado")
-
+    
 def eliminar_usuario():
     usuarios = cargar_usuarios()
     try:
@@ -103,4 +131,4 @@ def usuarios_menu():
             break
         else:
             print("Opcion invalida, intente otra vez")
-        
+
